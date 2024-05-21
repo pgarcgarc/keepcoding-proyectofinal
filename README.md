@@ -44,13 +44,13 @@ El analisis detallado de este paso esta en **"Informe.pdf"**.
 
 
 
-## 🛠 Herramientas y Tecnologías
+## Herramientas y Tecnologías
 - Lenguajes de Programación: Python, R, SQL
 - Bibliotecas de Análisis de Datos: Pandas, NumPy, tidyverse, dplyr, ggplot2, tidyr, glmnet, caret
 - Herramientas de Visualización: Tableau, Draw.io
 
 
-## 🛠 Configuración
+## Configuración
 - El dataset del proyecto es [éste](https://public.opendatasoft.com/explore/dataset/air-bnb-listings/export/?disjunctive.neighbourhood&disjunctive.column_10&disjunctive.city&q=Madrid&location=7,40.5931,-4.422&basemap=jawg.light). Hay que exportarlo en formato CSV.
 - Python: Asegúrate de tener instalado Python en tu sistema. Puedes descargarlo desde [python.org](https://www.python.org/) o utilizar un entorno de desarrollo como Anaconda.
 - R: Instala R desde [r-project.org](https://www.r-project.org/) y un IDE como RStudio desde [su página principal](https://posit.co/download/rstudio-desktop/) para un entorno de desarrollo conveniente.

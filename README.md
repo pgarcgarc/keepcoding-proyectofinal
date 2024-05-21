@@ -6,10 +6,11 @@
 
 Este proyecto es el trabajo final del curso de especialización "Women in Tech II", enfocado en la formación en Big Data con un énfasis particular en el análisis de datos. 
 ## Tabla de Contenidos
-* [Visión general](#visión-general)
-* [Herramientas y Tecnologías](#herramientas-y-tecnologías)
-* [Configuración](#configuración)
-* [Lessons Learned](#lessons-learned)
+* [Visión general](#vision-general)
+* [Pasos Realizados para Completar el Proyecto](#pasos-realizados-para-completar-el-proyecto)
+* [Herramientas y Tecnologías](#herramientas-y-tecnologias)
+* [Configuración](#configuracion)
+* [Conclusiones y Lessons Learned](#conclusiones-y-lessons-learned)
 * [Autoras](#autoras)
 
 ## Visión General
@@ -52,7 +53,7 @@ El analisis detallado de este paso esta en **"Informe.pdf"**.
 ## 🛠 Configuración
 - El dataset del proyecto es [éste](https://public.opendatasoft.com/explore/dataset/air-bnb-listings/export/?disjunctive.neighbourhood&disjunctive.column_10&disjunctive.city&q=Madrid&location=7,40.5931,-4.422&basemap=jawg.light). Hay que exportarlo en formato CSV.
 - Python: Asegúrate de tener instalado Python en tu sistema. Puedes descargarlo desde [python.org](https://www.python.org/) o utilizar un entorno de desarrollo como Anaconda.
-- R: Instala R desde [r-project.org](https://www.r-project.org/) y un IDE como RStudio desde [su página principal](https://posit.co/download/rstudio-desktop/)para un entorno de desarrollo conveniente.
+- R: Instala R desde [r-project.org](https://www.r-project.org/) y un IDE como RStudio desde [su página principal](https://posit.co/download/rstudio-desktop/) para un entorno de desarrollo conveniente.
 - SQL: PostgreSQL.
 - Tableau: Descarga e instala Tableau desde [tableau.com](https://www.tableau.com/es-es/products/desktop/download).
 

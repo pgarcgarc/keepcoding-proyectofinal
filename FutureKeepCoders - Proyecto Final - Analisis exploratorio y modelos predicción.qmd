@@ -27,12 +27,19 @@ Revisión calidad de datos y detección outliers (rango de variables) :
 print(dim(df_airbnb)) 
 print(str(df_airbnb))
 
+# Identificar filas duplicadas (excepto la primera ocurrencia)
+duplicados <- duplicated(df_airbnb)
+
+# Imprimir las filas duplicadas
+print(df_airbnb[duplicados, ])
+
+
 # Comprobar valores nulos
 print(colSums(is.na(df_airbnb)))
 
 # Calcular Q1 (primer cuartil) y Q3 (tercer cuartil)
-Q1 <- quantile(df_airbnb$RoomPrice, 0.25, na.rm = TRUE)
-Q3 <- quantile(df_airbnb$RoomPrice, 0.75, na.rm = TRUE)
+Q1 <- quantile(df_airbnb$`Room Price`, 0.25, na.rm = TRUE)
+Q3 <- quantile(df_airbnb$`Room Price`, 0.75, na.rm = TRUE)
 
 # Calcular el IQR
 IQR <- Q3 - Q1
@@ -42,16 +49,16 @@ lower_bound <- Q1 - 1.5 * IQR
 upper_bound <- Q3 + 1.5 * IQR
 
 # Identificar outliers
-outliers <- df_airbnb$RoomPrice[df_airbnb$RoomPrice < lower_bound | df_airbnb$RoomPrice > upper_bound]
+outliers <- df_airbnb$`Room Price`[df_airbnb$`Room Price` < lower_bound | df_airbnb$`Room Price` > upper_bound]
 
 # Imprimir outliers
 print(outliers)
 
 # Crear un boxplot para la columna 'price'
-boxplot(df_airbnb$RoomPrice, main = "Boxplot of Price", ylab = "Price")
+boxplot(df_airbnb$`Room Price`, main = "Boxplot of Price", ylab = "Price")
 
 # Identificar los valores atípicos del boxplot
-outliers <- boxplot.stats(df_airbnb$RoomPrice)$out
+outliers <- boxplot.stats(df_airbnb$`Room Price`)$out
 
 # Imprimir outliers
 print(outliers)

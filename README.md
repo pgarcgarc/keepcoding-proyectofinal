@@ -6,7 +6,7 @@
 
 Este proyecto es el trabajo final del curso de especialización "Women in Tech II", enfocado en la formación en Big Data con un énfasis particular en el análisis de datos. 
 ## Tabla de Contenidos
-* [Visión general](#vision-general)
+* [Visión general](#visión-general)
 * [Pasos Realizados para Completar el Proyecto](#pasos-realizados-para-completar-el-proyecto)
 * [Herramientas y Tecnologías](#herramientas-y-tecnologias)
 * [Configuración](#configuracion)

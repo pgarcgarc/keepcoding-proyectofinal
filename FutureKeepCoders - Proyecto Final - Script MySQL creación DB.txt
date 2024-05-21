@@ -1,0 +1,51 @@
+Para crear la base de datos se ha utilizado el siguiente codigo:
+create schema airbnb;
+set schema 'airbnb';
+Aquí se importan los datos del csv creado una vez filtrados los datos que sean solo de Madrid y eliminada la columna que hemos desechado, para crear la tabla tmp_airbnb;
+select  * from temp_airbnb ta;
+
+create table alojamiento(
+	HostID int4 primary key,
+	Name varchar(500),
+	RommType varchar(500),
+	RoomPrice int4,
+	RoomId int4);
+	
+create table availibility(
+	Id smallserial primary key,
+	RoomId int4,
+	RoomsRentByTheHost int4,
+	Availibility int4);
+	
+create table neighbourhood (
+	Id smallserial primary key,
+	Neighbourhood varchar(500),
+	Country varchar(500),
+	City varchar(500),
+	RoomId int4);
+	
+create table reviews (
+	Id smallserial primary key,
+	HostID int4,
+	NumberOfReviews int4,
+	ReviewsPerMonth int4,
+	DateLastReview varchar(500));
+	
+insert into alojamiento (HostID, Name, RommType, RoomPrice, RoomId)
+select distinct ta."Room ID" , ta."Name" , ta."Room type" ,ta."Room Price" , ta."Room ID" from temp_airbnb ta 
+
+insert into availibility (RoomId,RoomsRentByTheHost,Availibility)
+select distinct ta."Room ID" ,ta."Rooms rent by the host" ,ta."Availibility" from temp_airbnb ta
+
+insert  into neighbourhood (Neighbourhood,Country,City, RoomId)
+select distinct  ta."Neighbourhood" ,ta."Country" ,ta."City" ,ta."Room ID" from temp_airbnb ta
+
+insert into reviews (HostID,NumberOfReviews,ReviewsPerMonth,DateLastReview)
+select distinct  ta."Host ID" ,ta."Number of reviews" , ta."Number of reviews per month" ,ta."Date last review" from temp_airbnb ta
+
+
+
+alter table alojamiento  add CONSTRAINT fk_roomid_alojamiento FOREIGN KEY (RoomId) REFERENCES Neighbourhood(Id);
+alter table availibility add CONSTRAINT fk_roomid_availability FOREIGN KEY (RoomId) REFERENCES Alojamiento(RoomId);
+alter table availibility add CONSTRAINT fk_hostid_availability FOREIGN KEY (RoomsRentByTheByHost) REFERENCES Alojamiento(HostId);
+alter table reviews add CONSTRAINT fk_hostid_reviews FOREIGN KEY (HostId) REFERENCES Alojamiento(HostId);

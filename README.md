@@ -9,7 +9,7 @@ Este proyecto es el trabajo final del curso de especialización "Women in Tech I
 * [Visión general](#visión-general)
 * [Pasos Realizados para Completar el Proyecto](#pasos-realizados-para-completar-el-proyecto)
 * [Herramientas y Tecnologías](#herramientas-y-tecnologías)
-* [Configuración](#configuracion)
+* [Configuración](#configuración)
 * [Conclusiones y Lessons Learned](#conclusiones-y-lessons-learned)
 * [Autoras](#autoras)
 
@@ -69,7 +69,7 @@ El analisis detallado de este paso esta en **"Informe.pdf"**.
 
 ## Autoras
 
-- [Patri García](https://github.com/pgarcgarc)
+- [Patri García](https://www.linkedin.com/in/patriciagarciagarcia)
 - [Marina Sindreu Riba](https://github.com/msindreu)
 - [María Rodriguez Abad](https://github.com/MariaRgezAbad)
 - [Yana Tolstobrova](https://github.com/yana-tolstobrova)

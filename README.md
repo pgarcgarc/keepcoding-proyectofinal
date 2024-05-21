@@ -8,7 +8,7 @@ Este proyecto es el trabajo final del curso de especialización "Women in Tech I
 ## Tabla de Contenidos
 * [Visión general](#visión-general)
 * [Pasos Realizados para Completar el Proyecto](#pasos-realizados-para-completar-el-proyecto)
-* [Herramientas y Tecnologías](#herramientas-y-tecnologias)
+* [Herramientas y Tecnologías](#herramientas-y-tecnologías)
 * [Configuración](#configuracion)
 * [Conclusiones y Lessons Learned](#conclusiones-y-lessons-learned)
 * [Autoras](#autoras)

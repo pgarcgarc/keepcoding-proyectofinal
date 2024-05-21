@@ -1,0 +1,226 @@
+---
+title: "proyecto_final"
+format: html
+editor: visual
+---
+
+Vamos a utilizar el dataset de semillas que se encuentra aquí: <https://public.opendatasoft.com/explore/dataset/air-bnb-listings/table/?disjunctive.neighbourhood&disjunctive.column_10&disjunctive.city&q=Madrid&location=7,40.5931,-4.422&basemap=jawg.light>
+
+Primero vamos a descargarnos el dataframe y mostramos las primeras filas :
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+df_airbnb <- read_delim('AirbnbMadrid.csv', delim = ';')
+
+print(head(df_airbnb))
+
+```
+
+Revisión calidad de datos y detección outliers (rango de variables) :
+
+```{r}
+# Revisión de la calidad de los datos
+print(dim(df_airbnb)) 
+print(str(df_airbnb))
+
+# Comprobar valores nulos
+print(colSums(is.na(df_airbnb)))
+
+```
+
+Vamos a contar el número de filas y columnas de nuestro dataset:
+
+```{r}
+paste("El dataframe df_airbnb tiene", nrow(df_airbnb), "filas y", ncol(df_airbnb), "columnas.")
+```
+
+**Resumen dataframe**
+
+```{r}
+print(summary(df_airbnb))
+
+```
+
+#### 
+
+Distribución de los precios según el tipo de habitación (gráfico tipo violín):
+
+```{r}
+ggplot(df_airbnb, aes(x = `Room type`, y = `Room Price`)) +
+  geom_violin(trim = FALSE, fill = "lightblue", color = "darkblue") +
+  labs(title = "Distribución de los precios según el tipo de habitación",
+       x = "Tipo de Habitación",
+       y = "Precio") +
+  theme_minimal()
+
+```
+
+\
+Disponibilidad media de los listados durante el año según el tipo de habitación
+
+```{r}
+df_grouped <- group_by(df_airbnb, `Room type`)
+
+# Calculando la disponibilidad media
+disponibilidad_por_tipo <- summarise(df_grouped, Disponibilidad_media = mean(Availibility, na.rm = TRUE))
+
+# Crear el diagrama de barras
+ggplot(disponibilidad_por_tipo, aes(x = `Room type`, y = Disponibilidad_media)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Disponibilidad media de los listados durante el año según el tipo de habitación",
+       x = "Tipo de habitación",
+       y = "Disponibilidad media") +
+  theme_minimal()
+
+```
+
+Gráfico disponibilidad media por vecindario (Top 10)
+
+```{r}
+# Agrupar por vecindario y calcular la disponibilidad media
+df_grouped <- group_by(df_airbnb, Neighbourhood)
+disponibilidad_por_vecindario <- summarise(df_grouped, Disponibilidad_media = mean(Availibility, na.rm = TRUE))
+
+# Seleccionar los 10 vecindarios con mayor disponibilidad media
+top_vecindarios_disp <- head(arrange(disponibilidad_por_vecindario, desc(Disponibilidad_media)), 10)
+
+# Crear el diagrama de barras
+ggplot(top_vecindarios_disp, aes(x = reorder(Neighbourhood, Disponibilidad_media), y = Disponibilidad_media)) +
+  geom_bar(stat = "identity", fill = "purple") +
+  labs(title = "Disponibilidad media por vecindario (Top 10)",
+       x = "Vecindario",
+       y = "Disponibilidad media") +
+  coord_flip() +
+  theme_minimal()
+
+```
+
+#### Creación de modelo para predecir precio de un alojamiento:
+
+```{r}
+colnames(df_airbnb)[colnames(df_airbnb) == "Room type"] <- "RoomType"
+colnames(df_airbnb)[colnames(df_airbnb) == "Number of reviews"] <- "NumberReviews"
+colnames(df_airbnb)[colnames(df_airbnb) == "Room Price"] <- "RoomPrice"
+colnames(df_airbnb)[colnames(df_airbnb) == "Rooms rent by the host"]<-"RoomsRentByTheHost"
+```
+
+Primero dividimos el dataset en train y test, para evitar el sobreajuste y poder proporcionarle mejor capacidad de estimación a la hora de generalizar datos nuevos y que sea posible evaluar la capacidad del modelo.
+
+```{r}
+set.seed(123) 
+idx <- sample(1:nrow(df_airbnb), 0.7*nrow(df_airbnb))
+df_airbnb_train <- df_airbnb[idx,]
+df_airbnb_test <- df_airbnb[-idx,]
+```
+
+```{r}
+df_airbnb
+
+```
+
+```{r}
+library(glmnet) 
+library(dplyr)
+library(caret)
+library(ggplot2)
+df_airbnb_train$Neighbourhood <- as.factor(df_airbnb_train$Neighbourhood)
+df_airbnb_train$RoomType <- as.factor(df_airbnb_train$RoomType)
+df_airbnb_test$Neighbourhood <- as.factor(df_airbnb_test$Neighbourhood)
+df_airbnb_test$RoomType <- as.factor(df_airbnb_test$RoomType)
+```
+
+```{r}
+df_airbnb_train$Expensive <- as.factor(ifelse(df_airbnb_train$RoomPrice > median(df_airbnb_train$RoomPrice, na.rm = TRUE), 1, 0))
+df_airbnb_test$Expensive <- as.factor(ifelse(df_airbnb_test$RoomPrice > median(df_airbnb_train$RoomPrice, na.rm = TRUE), 1, 0))
+```
+
+```{r}
+model <- glm(Expensive ~ Neighbourhood + RoomType + NumberReviews, data = df_airbnb_train, family = binomial())
+model
+```
+
+```{r}
+predictions_prob <- predict(model, newdata = df_airbnb_test, type = "response")
+```
+
+```{r}
+predicted_classes <- ifelse(predictions_prob > 0.5, 1, 0)
+```
+
+```{r}
+predicted_classes <- as.factor(predicted_classes)
+df_airbnb_test$Expensive <- as.factor(df_airbnb_test$Expensive)
+conf_matrix <- confusionMatrix(predicted_classes, df_airbnb_test$Expensive)
+precision <- conf_matrix$byClass['Pos Pred Value']
+recall <- conf_matrix$byClass['Sensitivity']
+cat("Precisión:", precision, "\n")
+cat("Exhaustividad:", recall, "\n")
+```
+
+```{r}
+predicted_prices <- predict(model, newdata = df_airbnb_test)
+real_prices <- df_airbnb_test$RoomPrice
+results <- data.frame(RealPrice = real_prices, PredictedPrice = predicted_prices)
+head(results)
+```
+
+```{r}
+head(results)
+```
+
+Otro modelo
+
+```{r}
+model1 <- glm(Expensive ~ Neighbourhood + RoomType, data = df_airbnb_train, family = binomial())
+model1
+```
+
+```{r}
+predictions_prob1 <- predict(model1, newdata = df_airbnb_test, type = "response")
+predicted_classes1 <- ifelse(predictions_prob1 > 0.5, 1, 0)
+predicted_classes1 <- as.factor(predicted_classes1)
+df_airbnb_test$Expensive <- as.factor(df_airbnb_test$Expensive)
+conf_matrix1 <- confusionMatrix(predicted_classes1, df_airbnb_test$Expensive)
+precision1 <- conf_matrix1$byClass['Pos Pred Value']
+recall1 <- conf_matrix1$byClass['Sensitivity']
+cat("Precisión:", precision, "\n")
+cat("Exhaustividad:", recall, "\n")
+```
+
+```{r}
+model2 <- glm(Expensive ~ Neighbourhood + RoomType + NumberReviews + RoomsRentByTheHost, data = df_airbnb_train, family = binomial())
+model2
+```
+
+```{r}
+predictions_prob2 <- predict(model2, newdata = df_airbnb_test, type = "response")
+predicted_classes2 <- ifelse(predictions_prob2 > 0.5, 1, 0)
+predicted_classes2 <- as.factor(predicted_classes2)
+df_airbnb_test$Expensive <- as.factor(df_airbnb_test$Expensive)
+conf_matrix2 <- confusionMatrix(predicted_classes2, df_airbnb_test$Expensive)
+precision2 <- conf_matrix2$byClass['Pos Pred Value']
+recall2 <- conf_matrix2$byClass['Sensitivity']
+cat("Precisión:", precision, "\n")
+cat("Exhaustividad:", recall, "\n")
+```
+
+```{r}
+model3 <- glm(Expensive ~ Neighbourhood, data = df_airbnb_train, family = binomial())
+model3
+```
+
+```{r}
+predictions_prob3 <- predict(model3, newdata = df_airbnb_test, type = "response")
+predicted_classes3 <- ifelse(predictions_prob3 > 0.5, 1, 0)
+predicted_classes3 <- as.factor(predicted_classes3)
+df_airbnb_test$Expensive <- as.factor(df_airbnb_test$Expensive)
+conf_matrix3 <- confusionMatrix(predicted_classes3, df_airbnb_test$Expensive)
+precision3 <- conf_matrix3$byClass['Pos Pred Value']
+recall1 <- conf_matrix3$byClass['Sensitivity']
+cat("Precisión:", precision, "\n")
+cat("Exhaustividad:", recall, "\n")
+```

@@ -30,6 +30,33 @@ print(str(df_airbnb))
 # Comprobar valores nulos
 print(colSums(is.na(df_airbnb)))
 
+# Calcular Q1 (primer cuartil) y Q3 (tercer cuartil)
+Q1 <- quantile(df_airbnb$RoomPrice, 0.25, na.rm = TRUE)
+Q3 <- quantile(df_airbnb$RoomPrice, 0.75, na.rm = TRUE)
+
+# Calcular el IQR
+IQR <- Q3 - Q1
+
+# Definir límites inferior y superior
+lower_bound <- Q1 - 1.5 * IQR
+upper_bound <- Q3 + 1.5 * IQR
+
+# Identificar outliers
+outliers <- df_airbnb$RoomPrice[df_airbnb$RoomPrice < lower_bound | df_airbnb$RoomPrice > upper_bound]
+
+# Imprimir outliers
+print(outliers)
+
+# Crear un boxplot para la columna 'price'
+boxplot(df_airbnb$RoomPrice, main = "Boxplot of Price", ylab = "Price")
+
+# Identificar los valores atípicos del boxplot
+outliers <- boxplot.stats(df_airbnb$RoomPrice)$out
+
+# Imprimir outliers
+print(outliers)
+
+
 ```
 
 Vamos a contar el número de filas y columnas de nuestro dataset:

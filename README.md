@@ -66,13 +66,13 @@ El analisis detallado de este paso esta en **"Informe.pdf"**.
 
 **Importancia de la limpieza de datos**: La calidad de los datos es fundamental para el rendimiento del modelo. Mejorar la limpieza y el preprocesamiento de datos puede llevar a modelos más precisos. 
 
-
 ## Autoras
 
-- [Patri García](https://www.linkedin.com/in/patriciagarciagarcia)
+- [Patricia García García](https://www.linkedin.com/in/patriciagarciagarcia)
 - [Marina Sindreu Riba](https://github.com/msindreu)
 - [María Rodriguez Abad](https://github.com/MariaRgezAbad)
 - [Yana Tolstobrova](https://github.com/yana-tolstobrova)
 - [Natalia Gil Espallargas](https://github.com/Nataliage)
 - [Ana Yepes Triana](https://github.com/Anayepes)
+
 
